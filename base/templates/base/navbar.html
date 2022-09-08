@@ -1,0 +1,40 @@
+<style>
+
+    .username{
+
+        color: black;
+    }
+</style>
+
+<h2><a href="{% url 'home' %}">LOGO</a></h2>
+
+{% if not request.user.is_authenticated %}
+    
+    <div>
+
+        <small><a href="{% url 'registerpage' %}">Sign Up</a></small>
+        <small><a href="{% url 'loginpage' %}">Sign In</a></small>
+
+    </div> 
+
+{% else %}
+
+    <div>
+
+        <small><strong>Hello <a href="#"><span class="username">{{ request.user.username.upper }}</span></a></strong></small>
+        <small><a href="{% url 'logoutpage' %}">Sign out</a></small>
+
+    </div>
+    
+{% endif %}
+    
+<hr>
+
+<div>
+    <form action="{% url 'home' %}" method="get">
+
+        <input type="text" name="q" id="q" placeholder="Search rooms">
+        <input type="submit" value="Search">
+        
+    </form>
+</div>

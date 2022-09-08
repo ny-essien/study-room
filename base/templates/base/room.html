@@ -1,0 +1,91 @@
+{% extends 'base/main.html' %}
+
+{% block content %}
+
+    <style>
+
+        .room-container{
+
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+        }
+    </style>
+
+    <div class="room-container">
+ 
+        <div>
+
+            <h2>{{room.name}}</h2>
+
+            <h2>Conversation{{room.messages|pluralize}}</h2>
+            <hr>
+
+            <div>
+                {% for message in room_messages %}
+
+                    {% if request.user == message.user %}
+
+                        <small><a href="{% url 'delete-message' message.id %}">Delete</a></small>
+                        <small><a href="{% url 'edit-message' message.id %}">Edit</a></small><br>
+
+                    {% endif %}
+                
+                    @<small><a href="">{{message.user.get_username}}</a> {{ message.created|timesince }}</small><br><br>
+                    {{ message.body }}
+                    <hr>
+
+                {% endfor %}
+
+            </div>
+            <br><br>
+
+            {% if page == 'edit' %}
+
+                <div>
+
+                
+
+                    <form action="" method="post">
+
+                        {% csrf_token %}
+                        
+                        {{ message_form }}
+                        <input type="submit" value="Message">
+
+                    </form>
+
+                </div>
+
+            {% else %}    
+
+                <div>
+
+                    <form action="{% url 'create-message' room.id %}" method="post">
+
+                        {% csrf_token %}
+
+                        {{message_form}}
+                        <input type="submit" value="Message">
+                        
+                    </form>
+                    
+                </div>
+
+            {% endif %}
+            
+        </div>
+
+        <!--participants-->
+        <div>
+            <h2>Participants</h2>
+            <hr>
+            {% for parpticipant in room_participants %}
+
+                @<small><a href="#">{{parpticipant}}</a></small>
+                <hr>
+
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
